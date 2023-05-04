@@ -6,8 +6,8 @@ const port = process.env.PORT || 5000
 const bcrypt = require('bcrypt')
 const { Client } = require('pg')
 const {request, response} = require("express");
-const pg = require('../repositories/admin')
-const { client } = require('../app')
+const pg = require('../repositories/User')
+const db = require('../app')
 
 class CustomerController {
     register(app){
@@ -43,6 +43,32 @@ class CustomerController {
                     throw  error
                 }
 
+            })
+
+
+        app.route(("/searchRoute/:flightName"))
+            .get(async (request , response, next) => {
+                try{
+                    const flightName = request.params.flightName;
+                    let queryString = pg.pg.SELECT.SEARCHFLIGHT
+                    db.query(queryString , function (error , results){
+                        if(error){
+                            console.log(error)
+                            const error = new Error("Error while searching flights")
+                            error.statusCode=422;
+                            throw error
+                        }
+                        response.statusCode(200).json({flightRoute:results},"Flight Routes fetched Successfully")
+
+                    })
+
+
+
+                }
+                catch (err)
+                {
+                    console.log(err)
+                }
             })
     }
 }
