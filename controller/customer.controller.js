@@ -27,7 +27,7 @@ class CustomerController {
                     }
                     const hashedPassword = await bcrypt.hash(password,12)
                     let queryString  = pg.pg.INSERT.USER;
-                    client.query(queryString, function (error,results){
+                    db.query(queryString, function (error,results){
                         if(error){
                             console.log(error)
                         }

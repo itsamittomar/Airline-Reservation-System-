@@ -8,9 +8,7 @@ const bcrypt = require('bcrypt')
 const { Client } = require('pg')
 const {request, response} = require("express");
 const pg = require('../repositories/admin')
-const db = require('../db/postgres')
-
-console.log(db,"lkndknkfknkdnf")
+const db = require('../app')
 class AdminController {
     register(app){
         app.route("/admin_login")
@@ -26,11 +24,14 @@ class AdminController {
                                     console.log("Login Success!!");
                                     this.user_id = results.rows[0].admin_id;
                                     this.user_name = results.rows[0].username;
-                                    console.log(user_id)
+                                    response.statusCode(200).json({userId: user_id ,userName : user_name},"Login Successfull !!")
 
                                 } else {
+                                    const error = new Error("Error while Logging!!")
+                                    error.statusCode=422;
+                                    throw error
 
-                                    console.log("Incorrect password")
+
                                 }
                             });
                         }
