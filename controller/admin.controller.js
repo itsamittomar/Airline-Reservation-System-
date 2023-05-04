@@ -1,3 +1,4 @@
+console.log("nksdbkjsdkjd")
 const express = require('express');
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -6,16 +7,19 @@ const port = process.env.PORT || 5000
 const bcrypt = require('bcrypt')
 const { Client } = require('pg')
 const {request, response} = require("express");
-const pg = require('repositories/admin')
-const { client } = require('app')
-class AdminController{
+const pg = require('../repositories/admin')
+const db = require('../db/postgres')
+
+console.log(db,"lkndknkfknkdnf")
+class AdminController {
     register(app){
         app.route("/admin_login")
             .post(async (request , response, next) =>{
                 try{
+                    console.log("admin log")
                     const username = request.body.username;
                     const password = request.body.password;
-                    client.query('SELECT password,admin_id,username FROM airline.admin WHERE username = $1', [username] , function (error, results) {
+                    db.query('SELECT password,admin_id,username FROM airlines.admin WHERE username = $1', [username] , function (error, results) {
                         if (!error){
                             bcrypt.compare(password, results.rows[0].password, function(err, hashResult) {
                                 if(hashResult === true) {
@@ -51,10 +55,11 @@ class AdminController{
                     const fare = request.body.fare;
                     const seatingCapacity = request.body.seatingCapacity;
                     let querystring = pg.pg.INSERT.AIRLINE
-                    client.query(querystring, function (error , results)
+                    db.query(querystring, function (error , results)
                     {
                         if(error){
-                            const error = new Error("Error while adding flight")
+
+                            error = new Error("Error while adding flight",error)
                             error.statusCode = 422;
                             throw error
                         }
@@ -76,7 +81,7 @@ class AdminController{
                     const status = request.body.status;
                     const StaffCount = request.body.staffCount;
                     let querystring = pg.pg.UPDATE.AIRLINE
-                    client.query(querystring, function (error , results)
+                    db.query(querystring, function (error , results)
                     {
                         if(error){
                             const error = new Error("Error while updating flight Config")
@@ -100,3 +105,5 @@ class AdminController{
 
 
 }
+
+module.exports = AdminController
