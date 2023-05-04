@@ -10,5 +10,5 @@ selection and then make booking.
 a. must be able to add new routes and flight with flight configuration and time.
 b. create a flight configuration type to define seating capacity and arrangement.
 
-#Database
+# Database
 Using the postgres databases for this project
